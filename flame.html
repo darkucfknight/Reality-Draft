@@ -229,7 +229,7 @@
             </g>
         </g>
         <g id="meeps">
-            <g id="meep">
+            <g id="meeple">
                 <rect
                     id="body"
                     x="1"
@@ -552,7 +552,7 @@
                     </g>
                 </g>
             </g>
-            <g id="meep_2">
+            <g id="meeple_2">
                 <rect
                     id="body_2"
                     x="240"
@@ -1156,7 +1156,7 @@
                     </g>
                 </g>
             </g>
-            <g id="meep_3">
+            <g id="meeple_3">
                 <rect
                     id="body_3"
                     x="479"
@@ -1479,7 +1479,7 @@
                     </g>
                 </g>
             </g>
-            <g id="meep_4">
+            <g id="meeple_4">
                 <rect
                     id="body_4"
                     x="718"
@@ -2083,7 +2083,7 @@
                     </g>
                 </g>
             </g>
-            <g id="meep_5">
+            <g id="meeple_5">
                 <rect
                     id="body_5"
                     x="957"
@@ -2416,13 +2416,24 @@
     randomAnimationDelay('mid-flame', 2);
     randomAnimationDelay('little-flame', 2);
 
+    incrementAnimationDelay('meeple', 'meep-animate', 4);
+
     function randomAnimationDelay(idPrefix, maxDelay) {
         const elements = document.querySelectorAll("[id^='" + idPrefix + "']");
-        console.log(elements);
         elements.forEach((element) => {
             element.style['animationDelay'] =
                 (Math.random() * maxDelay).toString() + 's';
         });
+    }
+
+    // maxDelay is in seconds
+    function incrementAnimationDelay(idPrefix, animationClass, maxDelay) {
+        const elements = document.querySelectorAll("[id^='" + idPrefix + "']");
+        for (let i = 0; i < elements.length; i++) {
+            window.setTimeout(function () {
+                elements[i].classList.add(animationClass);
+            }, (maxDelay / elements.length) * i * 1000);
+        }
     }
 </script>
 <style>
@@ -2453,6 +2464,22 @@
             transform: translateY(-15px);
         }
     }
+    @keyframes boop-up {
+        0% {
+            opacity: 0;
+            transform: translateY(35%);
+        }
+        40% {
+            transform: translateY(-7%);
+        }
+        50% {
+            transform: translateY(0%);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(0%);
+        }
+    }
     svg {
         overflow: visible;
     }
@@ -2463,6 +2490,8 @@
         transform-origin: 50% 100%;
         transform-box: fill-box;
     }
+
+    /* Flames */
     [id^='big-flame'] {
         animation: pulse 2.5s ease infinite;
     }
@@ -2477,5 +2506,15 @@
     [id^='baby-flame'] {
         animation: pulse-hide 2s ease infinite;
         opacity: 0;
+    }
+
+    /* Meeple */
+    [id^='meep'] {
+        visibility: hidden;
+    }
+    .meep-animate {
+        visibility: visible;
+        animation: boop-up 1.25s linear;
+        animation-timing-function: cubic-bezier(0.36, 1.04, 0.79, 1.27);
     }
 </style>
